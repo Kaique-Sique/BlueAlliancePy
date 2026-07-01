@@ -1,7 +1,7 @@
 # smoke_test.py
 from bluealliance import TBACollector
 
-c = TBACollector("SUA_KEY")
+c = TBACollector("YOUR_API_KEY")
 
 # status da TBA
 status = c.status()
@@ -19,13 +19,13 @@ assert len(events) > 0
 print(f"{len(events)} eventos em 2025")
 
 # evento do megazord
-bundle = c.event_bundle("2025spbra")
+bundle = c.event_bundle("2025brba")
 print("evento:", bundle.event.name)
 print("times:", len(bundle.teams))
 print("partidas:", len(bundle.matches))
 
 # score breakdown 2025
-for match, bd in c.event_matches_2025("2025spbra"):
+for match, bd in c.event_matches_2025("2025brba"):
     if bd and match.comp_level.value == "qm":
         print(f"{match.key}: red={bd.red.totalPoints} blue={bd.blue.totalPoints}")
         break
