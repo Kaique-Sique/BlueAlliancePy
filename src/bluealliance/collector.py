@@ -1,40 +1,33 @@
 '''
-TBA Collector
-=============
-Typed data collection layer built on top of TBAClient + tba_schemas.
-Every method fetches from TBA and returns validated Pydantic objects --
+bluealliance.collector
+======================
+Typed data collection layer built on top of TBAClient + Pydantic schemas.
+Every method fetches from TBA and returns validated model instances --
 never raw dicts.
 
-Usage:
-    from tba_collector import TBACollector
+Example::
 
-    c = TBACollector()
+    from bluealliance import TBACollector
 
-    # single team
+    c = TBACollector("YOUR_TBA_KEY")
+
     team  = c.team("frc7563")
     print(team.nickname, team.city)
 
-    # all teams in an event, already typed
-    teams = c.event_teams("2025spbra")
-    for t in teams:
-        print(t.team_number, t.nickname)
-
-    # match with 2025 score breakdown already parsed
-    match, bd = c.match_2025("2025spbra_qm1")
-    if bd:
-        print(bd.red.autoCoralPoints, bd.blue.totalPoints)
-
-    # full event bundle in one call
     bundle = c.event_bundle("2025spbra")
     print(bundle.event.name)
     print(bundle.rankings.rankings[0].team_key)
+
+    match, bd = c.match_2025("2025spbra_qm1")
+    if bd:
+        print(bd.red.autoCoralPoints, bd.blue.totalPoints)
 '''
 
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
-from tba_client import TBAClient
-from tba_schemas import (
+from bluealliance.client import TBAClient
+from bluealliance.schemas import (
     APIStatus,
     Award,
     District,
@@ -112,8 +105,12 @@ class TBACollector:
     Every method returns Pydantic model instances, not raw dicts.
     '''
 
-    def __init__(self):
-        self._client = TBAClient()
+    def __init__(self, tba_key: str, base_url: str = "https://www.thebluealliance.com/api/v3"):
+        '''
+        :param tba_key: Your TBA API key from https://www.thebluealliance.com/account
+        :param base_url: TBA base URL (override for testing/mocking).
+        '''
+        self._client = TBAClient(tba_key, base_url)
 
     # -------------------------------------------------------------------------
     # TBA / STATUS
@@ -522,8 +519,6 @@ class TBACollector:
         Pass category="leaderboard", "streak", or "timeseries" to filter.
         Use year=0 for all-time.
         '''
-        from tba_schemas import InsightV2Leaderboard, InsightV2Streak, InsightV2Timeseries
-
         _map = {
             "leaderboard": InsightV2Leaderboard,
             "streak":      InsightV2Streak,

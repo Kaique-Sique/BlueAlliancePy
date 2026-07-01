@@ -1,24 +1,21 @@
 '''
-TBA API v3 - Pydantic Schemas
-==============================
-Response models for every type returned by the TBA API v3 endpoints.
+bluealliance.schemas
+====================
+Pydantic v2 response models for every type returned by the TBA API v3.
 Based on OpenAPI spec 3.15.0.
 
-Usage with tba_client.py:
-    from tba_client import TBAClient
-    from tba_schemas import Team, Match, Event, EventRanking
+Import directly from the package root for convenience::
 
-    client = TBAClient()
+    from bluealliance import Team, Match, Event, ScoreBreakdown2025
 
-    raw = client.get_team("frc7563")
-    team = Team.model_validate(raw)
-    print(team.nickname, team.city)
+Or from this module for finer control::
 
-    raw_matches = client.get_event_matches("2025spbra")
-    matches = [Match.model_validate(m) for m in raw_matches]
+    from bluealliance.schemas import Team, Match, parse_score_breakdown_2025
 
-    raw_ranking = client.get_event_rankings("2025spbra")
-    ranking = EventRanking.model_validate(raw_ranking)
+    match = Match.model_validate(raw_dict)
+    bd = parse_score_breakdown_2025(match.score_breakdown)
+    if bd:
+        print(bd.red.autoCoralPoints)
 '''
 
 from __future__ import annotations

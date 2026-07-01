@@ -1,19 +1,21 @@
-import requests
-
 '''
-TBA API v3 - Complete Client
-============================
-Standalone client covering every endpoint in the TBA OpenAPI 3.1.1 spec.
+bluealliance.client
+===================
+Raw HTTP client for The Blue Alliance API v3.
+Covers every endpoint in the OpenAPI 3.15.0 spec.
+Returns plain dicts/lists -- no Pydantic parsing.
+Use TBACollector for typed, schema-validated responses.
 
-No ETag caching -- every call hits TBA and returns the raw JSON. Use this client 
-if you want to get all the data from TBA without worrying about caching or ETags.
+Example::
 
-tba    from tba_client import TBAClient
+    from bluealliance import TBAClient
 
-    client = TBAClient()
+    client = TBAClient("YOUR_TBA_KEY")
     team = client.get_team("frc7563")
     matches = client.get_event_matches("2025arc")
 '''
+
+import requests
 
 
 class TBAClient:
