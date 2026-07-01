@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Python client for The Blue Alliance API v3 — typed, schema-validated, zero boilerplate."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["frc", "first-robotics", "the-blue-alliance", "tba", "api-client"]
 classifiers = [
     "Development Status :: 3 - Alpha",
